@@ -10,7 +10,7 @@ function refresh_tasks() {
                             <p class="card-text">${task}</p>
                         </div>
                         <div class="d-flex justify-content-evenly mb-1">
-                            <a class="text-danger fw-bold fs-3"><i class="bi bi-x"></i></a>
+                            <a class="text-danger fw-bold fs-3 delete-task"><i class="bi bi-x"></i></a>
                             <a class="text-secondary fw-bold fs-4"><i class="bi bi-pencil"></i></a>
                         </div>
                     </div>
@@ -29,7 +29,7 @@ function create_task(ev) {
     let task_text = new FormData(form1).get('task-text').trim();
 
     if (task_text.length === 0) {
-        document.querySelector('#input-invalid').textContent = 'لطفا عنوان کار پیش رو را وارد نمایید';
+        document.querySelector('#input-invalid').textContent = 'کادر خالی است';
     } else if (tasks.includes(task_text)) {
         document.querySelector('#input-invalid').textContent = 'متن وارد شده تکراری است';
     } else {
@@ -40,10 +40,14 @@ function create_task(ev) {
     }
 }
 
-// function delete_task() {
-//
-// }
+function delete_task(ev) {
+    let task_text = ev.target.parentElement.parentElement.previousElementSibling.firstElementChild.textContent;
+    tasks.splice(tasks.indexOf(task_text),1);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    let parent_tag = ev.target.parentElement.parentElement.parentElement.parentElement;
+    parent_tag.remove();
+}
 
 
 form1.addEventListener('submit', create_task);
-// document.querySelector('#delete_task').addEventListener('click', delete_task);
+document.querySelectorAll('a.delete-task').forEach(tag => tag.addEventListener('click', delete_task));
