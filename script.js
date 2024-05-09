@@ -1,7 +1,8 @@
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 function refresh_tasks() {
-    document.querySelector('#tasks').innerHTML = "";
+    let tasks_tag = document.querySelector('#tasks');
+    tasks_tag.innerHTML = "";
     for (let task of tasks) {
         let new_tag = `
                 <div class="col">
@@ -14,9 +15,8 @@ function refresh_tasks() {
                             <a class="text-secondary fw-bold fs-4"><i class="bi bi-pencil"></i></a>
                         </div>
                     </div>
-                </div>
-    `;
-        document.querySelector('#tasks').innerHTML += new_tag;
+                </div> `;
+        tasks_tag.innerHTML += new_tag;
     }
 }
 
@@ -26,7 +26,9 @@ let form1 = document.querySelector('form');
 
 function create_task(ev) {
     ev.preventDefault();
-    let task_text = new FormData(form1).get('task-text').trim();
+    // let task_text = new FormData(form1).get('task-text').trim();
+    let task_text = document.querySelector('#task-text').value.trim();
+
 
     if (task_text.length === 0) {
         document.querySelector('#input-invalid').textContent = 'کادر خالی است';
@@ -36,6 +38,7 @@ function create_task(ev) {
         document.querySelector('#input-invalid').textContent = '';
         tasks.push(task_text);
         localStorage.setItem('tasks', JSON.stringify(tasks));
+        document.querySelector('#task-text').value = '';
         refresh_tasks();
     }
 }
@@ -48,6 +51,13 @@ function delete_task(ev) {
     parent_tag.remove();
 }
 
+function clear_all(){
+    tasks = [];
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    refresh_tasks();
+}
 
+// Events
 form1.addEventListener('submit', create_task);
 document.querySelectorAll('a.delete-task').forEach(tag => tag.addEventListener('click', delete_task));
+document.getElementById('clear-all').addEventListener('click', clear_all);
