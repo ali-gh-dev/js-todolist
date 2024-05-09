@@ -1,6 +1,17 @@
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let form1 = document.querySelector('form');
 
+// Functions
 function refresh_tasks() {
+    // hide/show "search field" & "clear all button"
+    if (tasks.length === 0 ){
+        document.getElementById('search').style.display = 'none';
+        document.getElementById('clear-all').style.display = 'none';
+    }else{
+        document.getElementById('search').style.display = 'block';
+        document.getElementById('clear-all').style.display = 'block';
+    }
+
     let tasks_tag = document.querySelector('#tasks');
     tasks_tag.innerHTML = "";
     for (let task of tasks) {
@@ -18,11 +29,10 @@ function refresh_tasks() {
                 </div> `;
         tasks_tag.innerHTML += new_tag;
     }
+
 }
 
 refresh_tasks();
-
-let form1 = document.querySelector('form');
 
 function create_task(ev) {
     ev.preventDefault();
@@ -40,15 +50,17 @@ function create_task(ev) {
         localStorage.setItem('tasks', JSON.stringify(tasks));
         document.querySelector('#task-text').value = '';
         refresh_tasks();
+        location.reload();
     }
+
 }
 
 function delete_task(ev) {
     let task_text = ev.target.parentElement.parentElement.previousElementSibling.firstElementChild.textContent;
     tasks.splice(tasks.indexOf(task_text),1);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-    let parent_tag = ev.target.parentElement.parentElement.parentElement.parentElement;
-    parent_tag.remove();
+    refresh_tasks();
+    location.reload();
 }
 
 function clear_all(){
