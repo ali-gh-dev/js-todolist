@@ -4,10 +4,10 @@ let form1 = document.querySelector('form');
 // Functions
 function refresh_tasks() {
     // hide/show "search field" & "clear all button"
-    if (tasks.length === 0 ){
+    if (tasks.length === 0) {
         document.getElementById('search').style.display = 'none';
         document.getElementById('clear-all').style.display = 'none';
-    }else{
+    } else {
         document.getElementById('search').style.display = 'block';
         document.getElementById('clear-all').style.display = 'block';
     }
@@ -57,19 +57,74 @@ function create_task(ev) {
 
 function delete_task(ev) {
     let task_text = ev.target.parentElement.parentElement.previousElementSibling.firstElementChild.textContent;
-    tasks.splice(tasks.indexOf(task_text),1);
+    tasks.splice(tasks.indexOf(task_text), 1);
     localStorage.setItem('tasks', JSON.stringify(tasks));
     refresh_tasks();
     location.reload();
 }
 
-function clear_all(){
+function clear_all() {
     tasks = [];
     localStorage.setItem('tasks', JSON.stringify(tasks));
     refresh_tasks();
 }
 
+// function filter(ev) {
+//     if (ev.key === 'Enter') {
+//         let searched_txt = ev.target.value;
+//
+//         if (searched_txt.length === 0) {
+//             location.reload();
+//         } else {
+//             let filtered_tasks = [];
+//             for (let task of tasks) {
+//                 if (task.length >= searched_txt.length && task.substring(0, searched_txt.length) === searched_txt) {
+//                     filtered_tasks.push(task);
+//                 }
+//             }
+//             if (filtered_tasks.length === 0) {
+//                 document.getElementById('not-found').innerText = 'موردی یافت نشد !!!';
+//             } else {
+//                 document.getElementById('not-found').innerText = '';
+//                 tasks = filtered_tasks;
+//                 refresh_tasks();
+//             }
+//         }
+//     }
+// }
+
+function filter2(ev) {
+    let searched_txt = ev.target.value.toLowerCase();
+
+    if (searched_txt.length === 0) {
+        location.reload();
+    } else {
+
+        let filtered_tasks = [];
+
+        for (let task of tasks) {
+            if (task.toLowerCase().includes(searched_txt)) {
+                filtered_tasks.push(task);
+            }
+        }
+
+        if (filtered_tasks.length === 0) {
+            document.getElementById('tasks').innerHTML = "";
+            document.getElementById('not-found').innerText = 'موردی یافت نشد !!!';
+        } else {
+            document.getElementById('not-found').innerText = '';
+            tasks = filtered_tasks;
+            refresh_tasks();
+        }
+    }
+
+}
+
+
 // Events
 form1.addEventListener('submit', create_task);
 document.querySelectorAll('a.delete-task').forEach(tag => tag.addEventListener('click', delete_task));
 document.getElementById('clear-all').addEventListener('click', clear_all);
+// document.getElementById('search').addEventListener('keydown', filter);
+document.getElementById('search').addEventListener('input', filter2);
+
