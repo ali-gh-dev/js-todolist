@@ -1,5 +1,7 @@
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let form1 = document.querySelector('form');
+let submit_btn = document.querySelector('form button[type="submit"]');
+let old_task = '';
 
 // Functions
 function refresh_tasks() {
@@ -23,7 +25,7 @@ function refresh_tasks() {
                         </div>
                         <div class="d-flex justify-content-evenly mb-1">
                             <a class="text-danger fw-bold fs-3 delete-task"><i class="bi bi-x"></i></a>
-                            <a class="text-secondary fw-bold fs-4"><i class="bi bi-pencil"></i></a>
+                            <a class="text-secondary fw-bold fs-4 edit-task"><i class="bi bi-pencil"></i></a>
                         </div>
                     </div>
                 </div> `;
@@ -45,22 +47,41 @@ function create_task(ev) {
     } else if (tasks.includes(task_text)) {
         document.querySelector('#input-invalid').textContent = 'متن وارد شده تکراری است';
     } else {
-        document.querySelector('#input-invalid').textContent = '';
-        tasks.push(task_text);
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-        document.querySelector('#task-text').value = '';
-        refresh_tasks();
-        location.reload();
+
+        if (submit_btn.classList.contains('edit-btn')) {
+            // edit task
+            document.querySelector('#input-invalid').textContent = '';
+            let index = tasks.indexOf(old_task);
+            tasks[index] = task_text;
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            document.querySelector('#task-text').value = '';
+            refresh_tasks();
+            location.reload();
+
+        } else {
+            // create new task
+            document.querySelector('#input-invalid').textContent = '';
+            tasks.push(task_text);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            document.querySelector('#task-text').value = '';
+            refresh_tasks();
+            location.reload();
+        }
+
     }
 
 }
 
 function delete_task(ev) {
-    let task_text = ev.target.parentElement.parentElement.previousElementSibling.firstElementChild.textContent;
-    tasks.splice(tasks.indexOf(task_text), 1);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    refresh_tasks();
-    location.reload();
+    if (ev.target.classList.contains('bi-x')) {
+
+        let task_text = ev.target.parentElement.parentElement.previousElementSibling.firstElementChild.textContent.trim();
+        tasks.splice(tasks.indexOf(task_text), 1);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        refresh_tasks();
+        location.reload();
+    }
+
 }
 
 function clear_all() {
@@ -93,6 +114,7 @@ function clear_all() {
 //     }
 // }
 
+
 function filter2(ev) {
     let searched_txt = ev.target.value.toLowerCase();
 
@@ -120,11 +142,32 @@ function filter2(ev) {
 
 }
 
+function edit_task(ev) {
+    if (ev.target.classList.contains('bi-pencil')) {
+        let old, task_input;
+
+        old = ev.target.parentElement.parentElement.previousElementSibling.textContent.trim();
+
+        old_task = old;
+
+        task_input = document.getElementById('task-text');
+        task_input.value = old;
+        task_input.select();
+
+        submit_btn.innerText = 'ویرایش';
+        submit_btn.classList.replace('btn-success', 'btn-warning');
+        submit_btn.classList.add('edit-btn');
+
+
+    }
+}
+
 
 // Events
 form1.addEventListener('submit', create_task);
-document.querySelectorAll('a.delete-task').forEach(tag => tag.addEventListener('click', delete_task));
+document.querySelector('#tasks').addEventListener('click', delete_task);
 document.getElementById('clear-all').addEventListener('click', clear_all);
 // document.getElementById('search').addEventListener('keydown', filter);
 document.getElementById('search').addEventListener('input', filter2);
+document.querySelector('#tasks').addEventListener('click', edit_task);
 
