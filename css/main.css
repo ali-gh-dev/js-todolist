@@ -13,3 +13,8 @@
 .card a {
     cursor: pointer;
 }
+
+.card.edit-mode {
+    background: rgba(255, 193, 7, 0.4) !important;
+    color: black !important;
+}

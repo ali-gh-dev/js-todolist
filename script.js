@@ -34,8 +34,6 @@ function refresh_tasks() {
 
 }
 
-refresh_tasks();
-
 function create_task(ev) {
     ev.preventDefault();
     // let task_text = new FormData(form1).get('task-text').trim();
@@ -85,9 +83,12 @@ function delete_task(ev) {
 }
 
 function clear_all() {
-    tasks = [];
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    refresh_tasks();
+    // tasks = [];
+    // localStorage.setItem('tasks', JSON.stringify(tasks));
+    // refresh_tasks();
+
+    localStorage.removeItem('tasks');
+    location.reload();
 }
 
 // function filter(ev) {
@@ -113,7 +114,6 @@ function clear_all() {
 //         }
 //     }
 // }
-
 
 function filter2(ev) {
     let searched_txt = ev.target.value.toLowerCase();
@@ -144,7 +144,7 @@ function filter2(ev) {
 
 function edit_task(ev) {
     if (ev.target.classList.contains('bi-pencil')) {
-        let old, task_input;
+        let old, task_input, current_card, other_cards;
 
         old = ev.target.parentElement.parentElement.previousElementSibling.textContent.trim();
 
@@ -154,20 +154,23 @@ function edit_task(ev) {
         task_input.value = old;
         task_input.select();
 
+        other_cards = document.querySelectorAll('#tasks .card');
+        other_cards.forEach(card => card.classList.remove('edit-mode'));
+        current_card = ev.target.parentElement.parentElement.parentElement;
+        current_card.classList.add('edit-mode');
+
         submit_btn.innerText = 'ویرایش';
         submit_btn.classList.replace('btn-success', 'btn-warning');
         submit_btn.classList.add('edit-btn');
-
-
     }
 }
 
 
 // Events
+document.addEventListener('DOMContentLoaded', refresh_tasks);
 form1.addEventListener('submit', create_task);
 document.querySelector('#tasks').addEventListener('click', delete_task);
 document.getElementById('clear-all').addEventListener('click', clear_all);
 // document.getElementById('search').addEventListener('keydown', filter);
 document.getElementById('search').addEventListener('input', filter2);
 document.querySelector('#tasks').addEventListener('click', edit_task);
-
