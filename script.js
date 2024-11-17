@@ -10,6 +10,8 @@ function refresh_tasks() {
     // dark mode
     if(dark_mode === 'true'){
         body_tag.classList.add('dark-mode')
+        document.getElementById('dark-mode').checked = true
+        document.getElementById('light-mode').checked = false
     }else{
         body_tag.classList.remove('dark-mode')
     }
@@ -174,7 +176,7 @@ function edit_task(ev) {
 }
 
 function light_dark_mode(ev) {
-    if (ev.target.id === "btnradio2") {
+    if (ev.target.id === "dark-mode") {
         localStorage.setItem('dark_mode', 'true');
         refresh_tasks();
         location.reload();
