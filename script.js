@@ -5,7 +5,7 @@ let old_task = '';
 
 // Functions
 function refresh_tasks() {
-    // hide/show "search field" & "clear all button"
+    // hide/show "search field" & "clear-all button"
     if (tasks.length === 0) {
         document.getElementById('search').style.display = 'none';
         document.getElementById('clear-all').style.display = 'none';
