@@ -2,9 +2,17 @@ let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let form1 = document.querySelector('form');
 let submit_btn = document.querySelector('form button[type="submit"]');
 let old_task = '';
+let dark_mode = localStorage.getItem('dark_mode') || 'false';
+let body_tag = document.querySelector('body')
 
 // Functions
 function refresh_tasks() {
+    // dark mode
+    if(dark_mode === 'true'){
+        body_tag.classList.add('dark-mode')
+    }else{
+        body_tag.classList.remove('dark-mode')
+    }
     // hide/show "search field" & "clear-all button"
     if (tasks.length === 0) {
         document.getElementById('search').style.display = 'none';
@@ -165,6 +173,18 @@ function edit_task(ev) {
     }
 }
 
+function light_dark_mode(ev) {
+    if (ev.target.id === "btnradio2") {
+        localStorage.setItem('dark_mode', 'true');
+        refresh_tasks();
+        location.reload();
+    } else{
+        localStorage.setItem('dark_mode', 'false');
+        refresh_tasks();
+        location.reload();
+    }
+}
+
 
 // Events
 document.addEventListener('DOMContentLoaded', refresh_tasks);
@@ -174,3 +194,4 @@ document.getElementById('clear-all').addEventListener('click', clear_all);
 // document.getElementById('search').addEventListener('keydown', filter);
 document.getElementById('search').addEventListener('input', filter2);
 document.querySelector('#tasks').addEventListener('click', edit_task);
+document.querySelector('.light-dark').addEventListener('click', light_dark_mode);

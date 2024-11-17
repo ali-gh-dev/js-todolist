@@ -18,3 +18,7 @@
     background: rgba(255, 193, 7, 0.4) !important;
     color: black !important;
 }
+
+.dark-mode{
+    background-color: #2b2f32 !important;
+}
