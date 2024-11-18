@@ -5,6 +5,7 @@ let old_task = '';
 let dark_mode = localStorage.getItem('dark_mode') || 'false';
 let body_tag = document.querySelector('body')
 
+
 // Functions
 function refresh_tasks() {
     // dark mode
