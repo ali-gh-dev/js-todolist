@@ -23,7 +23,7 @@
     background-color: #3f4a4c !important;
 }
 
-#buttons .col-3 {
+#buttons .btn-group {
     padding: 0;
-    min-height: 5rem !important;
+    height: 2.75rem;
 }
