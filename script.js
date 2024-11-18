@@ -3,18 +3,17 @@ let form1 = document.querySelector('form');
 let submit_btn = document.querySelector('form button[type="submit"]');
 let old_task = '';
 let dark_mode = localStorage.getItem('dark_mode') || 'false';
-let body_tag = document.querySelector('body')
 
 
 // Functions
 function refresh_tasks() {
     // dark mode
     if(dark_mode === 'true'){
-        body_tag.classList.add('dark-mode')
+        document.body.classList.add('dark-mode')
         document.getElementById('dark-mode').checked = true
         document.getElementById('light-mode').checked = false
     }else{
-        body_tag.classList.remove('dark-mode')
+        document.body.classList.remove('dark-mode')
     }
     // hide/show "search field" & "clear-all button"
     if (tasks.length === 0) {
